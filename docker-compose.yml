@@ -1,0 +1,35 @@
+version: "3.3"
+
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    volumes:
+      - mongodata:/data/db
+      - mongo-config:/data/configdb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${PASSWORD}
+    ports:
+      - "27017:27017"
+    networks:
+      - databases
+  mongo-seed:
+    build: .
+    environment:
+      - MONGODB_HOST=mongo
+      - MONGODB_PORT=27017
+    volumes:
+      - ./db-seed:/data
+    depends_on:
+      - mongo
+    networks:
+      - databases
+    command: "mongodump --host ${HOST_HMLG} -u ${USER} -p ${PASSWORD} --authenticationDatabase admin --port ${PORT} -d ${DATABASE} --archive=sisreglocal.archive ; mongorestore --host mongo -u ${USER} -p ${PASSWORD} --authenticationDatabase admin --port ${PORT} --archive=sisreglocal.archive"
+volumes:
+  mongodata:
+  mongo-config:
+networks:
+  databases:
+    driver: bridge
