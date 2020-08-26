@@ -26,7 +26,7 @@ services:
       - mongo
     networks:
       - databases
-    command: "mongodump --host ${HOST_HMLG} -u ${USER} -p ${PASSWORD} --authenticationDatabase admin --port ${PORT} -d ${DATABASE} --archive=sisreglocal.archive ; mongorestore --host mongo -u ${USER} -p ${PASSWORD} --authenticationDatabase admin --port ${PORT} --archive=sisreglocal.archive"
+    command: "mongodump --host ${HOST_PROD} -u ${USER} -p ${PASSWORD} --authenticationDatabase admin --port ${PORT} -d ${DATABASE} --archive=sisreglocal.archive ; mongorestore --host mongo -u ${USER} -p ${PASSWORD} --authenticationDatabase admin --port ${PORT} --drop --archive=sisreglocal.archive"
 volumes:
   mongodata:
   mongo-config:
